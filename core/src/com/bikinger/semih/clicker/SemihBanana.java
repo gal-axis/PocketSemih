@@ -1,10 +1,10 @@
 package com.bikinger.semih.clicker;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.one2b3.endcycle.core.painting.CustomSpriteBatch;
-import com.one2b3.endcycle.engine.drawing.Painter;
 import com.one2b3.endcycle.engine.graphics.data.DrawableLoader;
 import com.one2b3.endcycle.engine.screens.GameScreen;
 import com.one2b3.endcycle.engine.screens.ScreenObject;
@@ -41,6 +41,12 @@ public class SemihBanana implements ScreenObject {
 
 	@Override
 	public void draw(CustomSpriteBatch batch, float xOfs, float yOfs) {
-		Painter.on(batch).at(position).align(0).alpha(alpha).scale(0.25f).paint(texture);
+		Affine2 affine = new Affine2();
+		affine.translate(position);
+		affine.scale(0.25F, 0.25F);
+		affine.rotate(rotation);
+		affine.translate(texture.getRegionWidth() * -0.5F, texture.getRegionHeight() * -0.5F);
+		batch.setColor(1, 1, 1, alpha);
+		batch.draw(texture, texture.getRegionWidth(), texture.getRegionHeight(), affine);
 	}
 }

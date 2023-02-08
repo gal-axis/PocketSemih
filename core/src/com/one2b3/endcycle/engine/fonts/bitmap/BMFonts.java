@@ -26,13 +26,13 @@ public enum BMFonts implements GameFont {
 
 	JetbrainsMono("jetbrainsmono", 26, 3, -2, 0.25F), //
 	ShareTech("sharetech", 32, 3, -2, 0.25F), //
-	ShareTechMono("sharetechmono", 42, 3, -3, 0.25F), //
-	ChakraPetch("chakrapetchmedium", 80, 4, 0, 0.25F), //
+	ShareTechMono("comic", 42, 3, -3, 0.25F), //
+	ChakraPetch("comic", 80, 4, 0, 0.25F), //
 	DarkerGrotesque("darkergrotesque", 48, 3, 0, 0.25F), //
 	;
 
-	static final String CHARACTER_SET = FreeTypeFontGenerator.DEFAULT_CHARS
-			+ "\u30d0\u30c8\u30eb\u30b9\u30bf\u30fc\u6642\u9593" + "\uc804\ud22c\uc2dc\uc791\uC2DC\uAC04";
+	static final String CHARACTER_SET = FreeTypeFontGenerator.DEFAULT_CHARS + "\u30d0\u30c8\u30eb\u30b9\u30bf\u30fc\u6642\u9593"
+			+ "\uc804\ud22c\uc2dc\uc791\uC2DC\uAC04";
 
 	final String path;
 	final int size;
@@ -206,8 +206,7 @@ public enum BMFonts implements GameFont {
 		}
 		float scaleRoundX = painter.batch.getScaleX(), scaleRoundY = painter.batch.getScaleY();
 		float begin = layout.runs.first().x;
-		cache.setPosition(MathUtils.round((x + begin) * scaleRoundX) / scaleRoundX - begin,
-				MathUtils.round(y * scaleRoundY) / scaleRoundY);
+		cache.setPosition(MathUtils.round((x + begin) * scaleRoundX) / scaleRoundX - begin, MathUtils.round(y * scaleRoundY) / scaleRoundY);
 		if (drawFull) {
 			cache.draw(painter.batch);
 		} else {
@@ -237,8 +236,8 @@ public enum BMFonts implements GameFont {
 			}
 			font.getData().setScale(scaleX, scaleY);
 			cache.clear();
-			GlyphLayout layout = cache.addText(object, 0, 0, width,
-					(hAlign == -1 ? Align.left : hAlign == 1 ? Align.right : Align.center), width > 0.0F);
+			GlyphLayout layout = cache.addText(object, 0, 0, width, (hAlign == -1 ? Align.left : hAlign == 1 ? Align.right : Align.center),
+					width > 0.0F);
 			font.getData().setScale(oldScaleX, oldScaleY);
 			return layout;
 		}

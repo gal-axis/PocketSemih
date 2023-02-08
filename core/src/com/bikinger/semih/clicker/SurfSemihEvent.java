@@ -21,6 +21,8 @@ public class SurfSemihEvent extends GameScreenObject implements InputListener {
 	TextureRegion texture;
 	final SemihClicker clicker;
 
+	float scale = 0.3F;
+
 	boolean caught;
 	float alpha;
 
@@ -35,8 +37,9 @@ public class SurfSemihEvent extends GameScreenObject implements InputListener {
 	}
 
 	public void catchSemih() {
-		if (caught)
+		if (caught) {
 			return;
+		}
 		texture = DrawableLoader.get().loadTexture("surfih2.png");
 		clicker.addBanana(clicker.bananaCount * 10, position.x, position.y);
 		caught = true;
@@ -49,10 +52,11 @@ public class SurfSemihEvent extends GameScreenObject implements InputListener {
 
 	@Override
 	public void update(float delta) {
-		if (caught)
+		if (caught) {
 			alpha -= delta;
-		else
+		} else {
 			position.x -= delta * speed;
+		}
 	}
 
 	@Override
@@ -67,13 +71,13 @@ public class SurfSemihEvent extends GameScreenObject implements InputListener {
 
 	@Override
 	public void draw(CustomSpriteBatch batch, float xOfs, float yOfs) {
-		Painter.on(batch).at(position).align(0).scale(0.25f).alpha(alpha).paint(texture);
+		Painter.on(batch).at(position).align(0).scale(scale).alpha(alpha).paint(texture);
 	}
 
 	@Override
 	public boolean triggerTouch(TouchEvent event) {
-		float width = texture.getRegionWidth() * 0.25F;
-		float height = texture.getRegionHeight() * 0.25F;
+		float width = texture.getRegionWidth() * scale;
+		float height = texture.getRegionHeight() * scale;
 		if (event.isPressed() && event.isIn(position.x - width * 0.5F, position.y - height * 0.5F, width, height)) {
 			catchSemih();
 			return true;
