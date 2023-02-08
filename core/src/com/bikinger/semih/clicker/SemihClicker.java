@@ -2,6 +2,7 @@ package com.bikinger.semih.clicker;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Vector2;
 import com.one2b3.endcycle.core.Cardinal;
 import com.one2b3.endcycle.core.painting.CustomSpriteBatch;
 import com.one2b3.endcycle.engine.drawing.Painter;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class SemihClicker extends GameScreenObject implements InputListener {
 
 	final SemihPoints points;
+	public int bananaCount = 1;
 
 	TextureRegion texture;
 	BoundedFloat clickAnimation = new BoundedFloat(0.0F, 1.0F, 4.0F);
@@ -51,13 +53,30 @@ public class SemihClicker extends GameScreenObject implements InputListener {
 	public boolean triggerTouch(TouchEvent event) {
 		if (event.isPressed()) {
 			clickAnimation.toMax();
-			StringDisplay spawn = StringDisplayFactory.spawn("+1 Banana", event.positionX, event.positionY);
-			spawn.font = GameFonts.TitleBorder;
-			spawn.animation = StringDisplayAnimation.BOUNCE;
-			spawn.setCharacterSpeed(10.0F);
-			screen.addObject(spawn);
-			points.increase(1);
+			int positionX = event.positionX;
+			int positionY = event.positionY;
+			addBanana(bananaCount, positionX, positionY);
+
 		}
 		return InputListener.super.triggerTouch(event);
+	}
+
+	public void addBanana(int bananaCount, float positionX, float positionY) {
+		StringDisplay spawn = StringDisplayFactory.spawn("+" + bananaCount + " Banana", positionX, positionY);
+		spawn.font = GameFonts.TitleBorder;
+		spawn.animation = StringDisplayAnimation.BOUNCE;
+		spawn.setCharacterSpeed(10.0F);
+		screen.addObject(spawn);
+		int lastPoints = points.getPoints();
+
+		points.increase(bananaCount);
+
+		for (int i = 0; i < bananaCount; ++i) {
+			screen.addObject(new SemihBanana(new Vector2(positionX, positionY)));
+		}
+
+		if (points.getPoints() / 10 > lastPoints / 10) {
+			screen.addObject(new SurfSemihEvent(this));
+		}
 	}
 }

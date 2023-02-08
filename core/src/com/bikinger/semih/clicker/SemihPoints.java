@@ -10,11 +10,15 @@ import com.one2b3.endcycle.utils.NumDisplay;
 
 public class SemihPoints implements ScreenObject {
 
+	public int getPoints() {
+		return (int) display.real;
+	}
+
 	NumDisplay display = new NumDisplay(100.0F, 0);
 
 	public void increase(int points) {
 		display.real += points;
-		display.speed = points * 3;
+		display.speed = 1000;
 	}
 
 	@Override
@@ -29,7 +33,7 @@ public class SemihPoints implements ScreenObject {
 
 	@Override
 	public void draw(CustomSpriteBatch batch, float xOfs, float yOfs) {
-		Painter.on(batch).at(Cardinal.getWidth() - 5, Cardinal.getHeight() - 5).align(1).font(GameFonts.MonospaceBorder).fontScale(2.0F)
-				.paint("Bananas: " + (int) display.val);
+		Painter.on(batch).at(Cardinal.getWidth() - 5, Cardinal.getHeight() - 5).align(1).font(GameFonts.MonospaceBorder)
+				.fontScale(2.0F).paint("Bananas: " + (int) display.val);
 	}
 }
