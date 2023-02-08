@@ -20,12 +20,19 @@ allprojects {
     version = '1.0'
     ext {
         appName = "Pocket Semih"
-        gdxVersion = '1.11.0'
-        roboVMVersion = '2.3.16'
-        box2DLightsVersion = '1.5'
-        ashleyVersion = '1.7.4'
-        aiVersion = '1.8.2'
-        gdxControllersVersion = '2.2.1'
+        gdxVersion = '1.10.0'
+        gdxControllerVersion = '2.2.0'
+        
+		// Core
+        lombokVersion = '1.18.16'
+        jorbisVersion = '0.0.17'
+        
+        // UI
+        visuiVersion = '1.5.0'
+        antlrVersion = '4.8-1'
+        
+        // Networking
+        kryonetVersion = '2.22.7'
     }
 
     repositories {
@@ -44,9 +51,15 @@ project(":desktop") {
 
 
     dependencies {
-        implementation project(":core")
+        api project(":core")
+        
+        compileOnly "org.projectlombok:lombok:$lombokVersion"
+        annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+        
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        api "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllerVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         
     }
 }
@@ -56,7 +69,19 @@ project(":core") {
 
 
     dependencies {
+        compileOnly "org.projectlombok:lombok:$lombokVersion"
+        annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+        
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllerVersion"
+        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+		
+        api "org.jcraft:jorbis:$jorbisVersion"
+        
+        api("com.github.crykn:kryonet:$kryonetVersion") {
+        	exclude group: "org.objenesis"
+		}
+		api "org.objenesis:objenesis:2.6"
         
     }
 }

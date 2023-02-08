@@ -1,37 +1,68 @@
 package com.bikinger.semih;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.one2b3.endcycle.core.load.DefaultLoader;
+import com.one2b3.endcycle.core.painting.CustomSpriteBatch;
+import com.one2b3.endcycle.core.platform.GamePlatform;
+import com.one2b3.endcycle.engine.input.InputListener;
+import com.one2b3.endcycle.engine.input.events.TouchEvent;
+import com.one2b3.endcycle.engine.objects.forms.BatchRectangle;
+import com.one2b3.endcycle.engine.objects.visuals.StringDisplay;
+import com.one2b3.endcycle.engine.objects.visuals.StringDisplayAnimation;
+import com.one2b3.endcycle.engine.objects.visuals.StringDisplayFactory;
+import com.one2b3.endcycle.engine.screens.GameScreen;
+import com.one2b3.endcycle.engine.screens.Layers;
 
-public class Cardinal extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
+public class Cardinal extends com.one2b3.endcycle.core.Cardinal {
 
-	@Override
-	public void create() {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+	public Cardinal() {
+		super(new DefaultLoader() {
+
+			@Override
+			public GamePlatform createPlatform() {
+				return null;
+			}
+
+			@Override
+			public GameScreen createOpeningScreen() {
+				GameScreen screen = new GameScreen() {
+					@Override
+					public void draw(CustomSpriteBatch batch, float xOfs, float yOfs) {
+						batch.clear();
+						super.draw(batch, xOfs, yOfs);
+					}
+				};
+				screen.input.add(new InputListener() {
+					@Override
+					public boolean triggerTouch(TouchEvent event) {
+						if (event.isPressed()) {
+							BatchRectangle rectangle = new BatchRectangle(event.positionX - 15, event.positionY - 15,
+									Layers.LAYER_1, 30, 30);
+							screen.addObject(rectangle);
+						} else if (event.isMoved()) {
+							BatchRectangle rectangle = screen.getObject(BatchRectangle.class);
+							if (rectangle != null) {
+								rectangle.x = event.positionX - 15;
+								rectangle.y = event.positionY - 15;
+							}
+							StringDisplay display = StringDisplayFactory.spawn("Hallo Semih!", event.positionX,
+									event.positionY);
+							display.fontScale = 2.0F;
+							display.animation = StringDisplayAnimation.BOUNCE;
+							screen.addObject(display);
+						} else if (event.isReleased()) {
+							BatchRectangle rectangle = screen.getObject(BatchRectangle.class);
+							screen.removeObject(rectangle);
+						}
+						return false;
+					}
+				});
+				return screen;
+			}
+
+			@Override
+			protected void loadGame() {
+			}
+		}, null, 416, 128, true);
 	}
 
-	@Override
-	public void render() {
-		ScreenUtils.clear(1.5f, 1.0f, 0.9f, 1f);
-		batch.begin();
-
-		boolean keyPressed = Gdx.input.isKeyPressed(Keys.BACKSPACE);
-		if (keyPressed)
-			batch.draw(img, 0, 0);
-
-		batch.end();
-	}
-
-	@Override
-	public void dispose() {
-		batch.dispose();
-		img.dispose();
-	}
 }
