@@ -43,19 +43,20 @@ public class SemihClicker extends GameScreenObject implements InputListener {
 		batch.clear();
 		float scale = (float) Cardinal.getHeight() / texture.getRegionHeight();
 		float scaleChange = -Interpolation.swingIn.apply(clickAnimation.getVal()) * 0.1F;
-		Painter.on(batch).at(texture.getRegionWidth() * scale * 0.5F, 0).hAlign(0).scale(scale, scale + scaleChange).paint(texture);
+		Painter.on(batch).at(texture.getRegionWidth() * scale * 0.5F, 0).hAlign(0).scale(scale, scale + scaleChange)
+				.paint(texture);
 	}
 
 	@Override
 	public boolean triggerTouch(TouchEvent event) {
 		if (event.isPressed()) {
 			clickAnimation.toMax();
-			StringDisplay spawn = StringDisplayFactory.spawn("+100 Bananas", event.positionX, event.positionY);
+			StringDisplay spawn = StringDisplayFactory.spawn("+1 Banana", event.positionX, event.positionY);
 			spawn.font = GameFonts.TitleBorder;
 			spawn.animation = StringDisplayAnimation.BOUNCE;
 			spawn.setCharacterSpeed(10.0F);
 			screen.addObject(spawn);
-			points.increase(100);
+			points.increase(1);
 		}
 		return InputListener.super.triggerTouch(event);
 	}
