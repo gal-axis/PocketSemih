@@ -31,7 +31,7 @@ public class SurfSemihEvent extends GameScreenObject implements InputListener {
 		super.init(screen);
 		screen.input.add(this);
 		texture = DrawableLoader.get().loadTexture("surfih1.png");
-		position = new Vector2(Cardinal.getWidth() + 100, MathUtils.random(0, Cardinal.getHeight()));
+		position = new Vector2(Cardinal.getWidth() + 100, MathUtils.random(0, Cardinal.getHeight() - 60) + 30);
 		speed = MathUtils.random(300f, 350f);
 		alpha = 1.0F;
 	}
@@ -40,8 +40,9 @@ public class SurfSemihEvent extends GameScreenObject implements InputListener {
 		if (caught) {
 			return;
 		}
+		screen.input.remove(this);
 		texture = DrawableLoader.get().loadTexture("surfih2.png");
-		clicker.addBanana(clicker.bananaCount * 10, position.x, position.y);
+		clicker.addBanana(clicker.surfBananas, position.x, position.y);
 		caught = true;
 	}
 
@@ -76,6 +77,9 @@ public class SurfSemihEvent extends GameScreenObject implements InputListener {
 
 	@Override
 	public boolean triggerTouch(TouchEvent event) {
+		if (!clicker.isEnabled()) {
+			return false;
+		}
 		float width = texture.getRegionWidth() * scale;
 		float height = texture.getRegionHeight() * scale;
 		if (event.isPressed() && event.isIn(position.x - width * 0.5F, position.y - height * 0.5F, width, height)) {

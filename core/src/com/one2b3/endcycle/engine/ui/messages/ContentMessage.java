@@ -136,8 +136,8 @@ public abstract class ContentMessage extends GameScreenMessage implements InputL
 		float x = calcX(), y = calcY();
 		batch.setColor(ActiveTheme.menuColor);
 		message.draw(batch, x, y, width, height);
-		drawContent(batch, x + message.getLeft(), y + message.getBottom(), width - message.getLeft() - message.getRight(),
-				height - message.getBottom() - message.getTop());
+		drawContent(batch, x + message.getLeft(), y + message.getBottom(),
+				width - message.getLeft() - message.getRight(), height - message.getBottom() - message.getTop());
 		batch.setColor(ActiveTheme.menuColor);
 		message.drawOverlay(batch, x, y, width, height);
 		drawButtons(batch, x, y);
@@ -174,7 +174,7 @@ public abstract class ContentMessage extends GameScreenMessage implements InputL
 	}
 
 	private float getButtonHeight() {
-		return 24.0F;
+		return 40.0F;
 	}
 
 	private float getButtonWidth() {
@@ -214,7 +214,8 @@ public abstract class ContentMessage extends GameScreenMessage implements InputL
 			float y = calcY();
 			float buttonWidth = getButtonWidth();
 			float buttonHeight = getButtonHeight();
-			if (event.positionX >= x && event.positionX <= x + width && event.positionY >= y - buttonHeight && event.positionY <= y) {
+			if (event.positionX >= x && event.positionX <= x + width && event.positionY >= y - buttonHeight
+					&& event.positionY <= y) {
 				selection = (int) ((event.positionX - x) / buttonWidth);
 				if (event.isReleased()) {
 					select();

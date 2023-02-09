@@ -43,7 +43,7 @@ public class SemihBanana implements ScreenObject {
 	public void draw(CustomSpriteBatch batch, float xOfs, float yOfs) {
 		Affine2 affine = new Affine2();
 		affine.translate(position);
-		affine.scale(0.25F, 0.25F);
+		affine.scale(0.15F, 0.15F);
 		affine.rotate(rotation);
 		affine.translate(texture.getRegionWidth() * -0.5F, texture.getRegionHeight() * -0.5F);
 		batch.setColor(1, 1, 1, alpha);

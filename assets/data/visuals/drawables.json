@@ -1,0 +1,18 @@
+[
+{
+	"class": "com.one2b3.endcycle.engine.graphics.data.DrawableData",
+	"id": { "id": 66 },
+	"name": "Lunar Button 9P",
+	"frames": [
+		{ "texturePath": "button.png", "width": 4, "height": 4 },
+		{ "texturePath": "button.png", "x": 4, "width": 4, "height": 4 },
+		{ "texturePath": "button.png", "x": 8, "width": 4, "height": 4 },
+		{ "texturePath": "button.png", "y": 4, "width": 4, "height": 2 },
+		{ "texturePath": "button.png", "x": 4, "y": 4, "width": 4, "height": 2 },
+		{ "texturePath": "button.png", "x": 8, "y": 4, "width": 4, "height": 2 },
+		{ "texturePath": "button.png", "y": 6, "width": 4, "height": 6 },
+		{ "texturePath": "button.png", "x": 4, "y": 6, "width": 4, "height": 6 },
+		{ "texturePath": "button.png", "x": 8, "y": 6, "width": 4, "height": 6 }
+	]
+}
+]

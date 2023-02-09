@@ -14,7 +14,8 @@ public class SemihCardinal extends Cardinal {
 
 	@Override
 	protected GamePainter createPainter(CustomSpriteBatch batch) {
-		return new ScaledPainter(batch, Resolutions.L_HEIGHT, Resolutions.L_WIDTH, Resolutions.L_HEIGHT, Resolutions.L_HEIGHT + 100);
+		return new ScaledPainter(batch, Resolutions.L_HEIGHT, Resolutions.L_WIDTH, Resolutions.L_HEIGHT,
+				Resolutions.L_WIDTH_MAX);
 	}
 
 }

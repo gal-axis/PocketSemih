@@ -17,8 +17,8 @@ public class ConfirmMessage extends ContentMessage {
 
 	public ConfirmMessage(final String text, final MessageAction action) {
 		cache = GameFonts.Text.getCache(text, 165.0F);
-		width = Math.max(100, cache.getWidth() + message.getLeft() + message.getRight() + 4);
-		height = Math.max(40, cache.getHeight() + message.getTop() + message.getBottom() + 4);
+		width = Math.max(100, cache.getWidth() + message.getLeft() + message.getRight() + 20);
+		height = Math.max(40, cache.getHeight() + message.getTop() + message.getBottom() + 20);
 		setChoices(1, Unlocalize.get("Yes"), Unlocalize.get("No"));
 		setActions(action, null);
 		selection = 1;
