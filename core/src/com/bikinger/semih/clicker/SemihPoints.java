@@ -5,11 +5,14 @@ import java.text.NumberFormat;
 import com.badlogic.gdx.graphics.Color;
 import com.one2b3.endcycle.core.Cardinal;
 import com.one2b3.endcycle.core.painting.CustomSpriteBatch;
+import com.one2b3.endcycle.engine.audio.music.MusicData;
+import com.one2b3.endcycle.engine.audio.music.MusicHandler;
 import com.one2b3.endcycle.engine.drawing.Painter;
 import com.one2b3.endcycle.engine.fonts.GameFonts;
 import com.one2b3.endcycle.engine.objects.visuals.StringDisplay;
 import com.one2b3.endcycle.engine.objects.visuals.StringDisplayAnimation;
 import com.one2b3.endcycle.engine.objects.visuals.StringDisplayFactory;
+import com.one2b3.endcycle.engine.screens.GameScreen;
 import com.one2b3.endcycle.engine.screens.GameScreenObject;
 import com.one2b3.endcycle.engine.screens.Layers;
 import com.one2b3.endcycle.screens.menus.Colors;
@@ -28,6 +31,20 @@ public class SemihPoints extends GameScreenObject {
 	public BoundedFloat fever = new BoundedFloat(6.0F);
 	public float experience;
 	NumDisplay display = new NumDisplay(100.0F, 0);
+
+	MusicData normalSong = new MusicData("music/normal.ogg", 0.0F);
+	MusicData feverSong = new MusicData("music/fever.ogg", 0.0F);
+
+	@Override
+	public void init(GameScreen screen) {
+		normalSong.id.id++;
+		super.init(screen);
+		playNormal();
+	}
+
+	private void playNormal() {
+		MusicHandler.instance.play(normalSong);
+	}
 
 	public void increase(int points) {
 		display.real += points;
@@ -58,6 +75,7 @@ public class SemihPoints extends GameScreenObject {
 			if (combo >= comboRequired) {
 				fever.toMax();
 				combo = 0;
+				MusicHandler.instance.play(feverSong, true);
 			}
 		}
 	}
@@ -76,7 +94,9 @@ public class SemihPoints extends GameScreenObject {
 		if (!multiplierTimer.decrease(delta)) {
 			multiplier = 1;
 		}
-		fever.decrease(delta);
+		if (fever.decrease(delta) && fever.atMin()) {
+			playNormal();
+		}
 	}
 
 	@Override

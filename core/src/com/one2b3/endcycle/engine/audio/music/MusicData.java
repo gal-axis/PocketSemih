@@ -42,6 +42,11 @@ public final class MusicData extends Moddable implements Named, DataName {
 	@ConnectsTo(MusicCatalog.class)
 	ID victory = Songs.Victory_A.getId();
 
+	public MusicData(String filePath, float loop) {
+		this.filepath = filePath;
+		this.loop = loop;
+	}
+
 	@Override
 	public String getName() {
 		return name;

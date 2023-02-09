@@ -165,6 +165,7 @@ public final class MusicHandler {
 		if (current == null || current.data != m || shifting) {
 			if (pause && (!shifting || !stopLast)) {
 				pause();
+				current = null;
 			} else {
 				stop();
 			}
