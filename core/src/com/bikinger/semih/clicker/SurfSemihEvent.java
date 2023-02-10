@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.one2b3.endcycle.core.Cardinal;
 import com.one2b3.endcycle.core.painting.CustomSpriteBatch;
+import com.one2b3.endcycle.engine.audio.sound.SoundInfo;
 import com.one2b3.endcycle.engine.drawing.Painter;
 import com.one2b3.endcycle.engine.graphics.data.DrawableLoader;
 import com.one2b3.endcycle.engine.input.InputListener;
@@ -44,6 +45,7 @@ public class SurfSemihEvent extends GameScreenObject implements InputListener {
 		texture = DrawableLoader.get().loadTexture("surfih2.png");
 		clicker.addBanana(clicker.surfBananas, position.x, position.y);
 		caught = true;
+		playSound(new SoundInfo("surfCatch.wav"));
 	}
 
 	@Override

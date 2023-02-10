@@ -1,0 +1,111 @@
+project.ext.assetsDir = new File("../assets")
+
+def keystoreProperties = getKeystoreProperties()
+
+def getKeystoreProperties() {
+    def propertiesFile = project.file("keystore.properties")
+    def properties = new Properties()
+    if (propertiesFile.exists()) {
+        properties.load(new FileInputStream(propertiesFile))
+    } else {
+        properties['storeFile'] = 'undefined'
+        properties['storePassword'] = ''
+        properties['keyAlias'] = ''
+        properties['keyPassword'] = ''
+    }
+	return properties;
+}
+
+android {
+    lintOptions {
+        enable 'NewApi', 'InlinedApi'
+        checkDependencies true
+        abortOnError true
+    }
+    signingConfigs {
+        release {
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
+    }
+    compileSdkVersion 31
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            jniLibs.srcDirs = ['libs']
+        }
+        debug {
+            assets.srcDirs = ['assets', 'debug/assets']
+        }
+        release {
+            assets.srcDirs = ['assets', 'release/assets']
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/robovm/ios/robovm.xml'
+        exclude 'META-INF/INDEX.LIST'
+        exclude '**.sha1'
+    }
+    defaultConfig {
+        applicationId "com.bikinger.semih"
+        minSdkVersion 19
+        targetSdkVersion 32
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            manifestPlaceholders = [admobId:"ca-app-pub-5784311004955543~7228177505"]
+            debuggable true
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+task copyAssets(type: Sync) {
+    from files(project.assetsDir)
+    into "assets"
+}
+
+preBuild.dependsOn copyAssets
+
+task copyAndroidNatives() {
+    file("libs/armeabi-v7a/").mkdirs()
+    file("libs/arm64-v8a/").mkdirs()
+    file("libs/x86_64/").mkdirs()
+    file("libs/x86/").mkdirs()
+
+    configurations.getByName("natives").copy().files.each { jar ->
+        def outputDir = null
+        if (jar.name.endsWith("natives-armeabi-v7a.jar")) outputDir = file("libs/armeabi-v7a")
+        if (jar.name.endsWith("natives-arm64-v8a.jar")) outputDir = file("libs/arm64-v8a")
+        if (jar.name.endsWith("natives-x86.jar")) outputDir = file("libs/x86")
+        if (jar.name.endsWith("natives-x86_64.jar")) outputDir = file("libs/x86_64")
+        if (outputDir != null) {
+            copy {
+                from zipTree(jar)
+                into outputDir
+                include "*.so"
+            }
+        }
+    }
+}

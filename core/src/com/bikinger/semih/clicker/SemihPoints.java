@@ -26,7 +26,7 @@ public class SemihPoints extends GameScreenObject {
 		return (int) display.real;
 	}
 
-	public int multiplier = 1, maxMultiplier = 4, combo, comboRequired = 50;
+	public int multiplier = 1, maxMultiplier = 3, combo, comboRequired = 50;
 	public BoundedFloat multiplierTimer = new BoundedFloat(0.0F, 1.0F, 1.0F);
 	public BoundedFloat fever = new BoundedFloat(6.0F);
 	public float experience;
@@ -65,7 +65,7 @@ public class SemihPoints extends GameScreenObject {
 		multiplierTimer.toMax();
 		if (multiplier < maxMultiplier) {
 			multiplier += 1;
-			multiplierTimer.setSpeed(Math.min(2.0F, multiplier * 0.2F));
+			multiplierTimer.setSpeed(Math.min(2.0F, multiplier * 0.4F));
 		}
 	}
 
@@ -85,7 +85,7 @@ public class SemihPoints extends GameScreenObject {
 	}
 
 	public int calcPoints(int points) {
-		return points * multiplier * (isFever() ? 5 : 1);
+		return points * multiplier * (isFever() ? 3 : 1);
 	}
 
 	@Override
@@ -137,7 +137,7 @@ public class SemihPoints extends GameScreenObject {
 		if (isFever()) {
 			Painter.on(batch).at(Cardinal.getWidth() * 0.5F, feverY + multiplierHeight * 0.5F)
 					.moveY(Modulator.getLinear(0, 5, 10)).align(0).font(GameFonts.MonospaceBorder).fontScale(2.0F)
-					.color(Colors.rainbow).paint("FEVER! 5x POINTS!");
+					.color(Colors.rainbow).paint("FEVER! 3x POINTS!");
 		} else {
 			Painter.on(batch).at(multiplierX + multiplierWidth * 0.5F, feverY + multiplierHeight * 0.5F).align(0)
 					.font(GameFonts.MonospaceBorder).paint("Banana Fever");

@@ -9,8 +9,12 @@ buildscript {
         google()
     }
     dependencies {
-        
-
+        classpath 'com.android.tools.build:gradle:4.1.1'
+    	classpath 'com.jaredsburrows:gradle-license-plugin:0.8.80'
+        classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.15'
+        classpath 'com.google.gms:google-services:4.3.3'
+		// classpath 'gradle.plugin.com.jtransc:jtransc-gradle-plugin:0.6.8'
+		classpath 'gradle.plugin.com.greensopinion.gradle-android-eclipse:gradle-android-eclipse:1.1'
     }
 }
 
@@ -42,6 +46,7 @@ allprojects {
         gradlePluginPortal()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "https://android-sdk.is.com" }
         maven { url "https://jitpack.io" }
     }
 }
@@ -83,5 +88,32 @@ project(":core") {
 		}
 		api "org.objenesis:objenesis:2.6"
         
+    }
+}
+
+
+if (findProject(':android') != null)
+project(":android") {
+    apply plugin: "android"
+
+    configurations { natives }
+
+    dependencies {
+        api project(":core")
+        compileOnly "org.projectlombok:lombok:$lombokVersion"
+        annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+        api "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
+        
+		natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
+		natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
+		natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
+		natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
+		
+        api "com.badlogicgames.gdx-controllers:gdx-controllers-android:$gdxControllerVersion"
     }
 }

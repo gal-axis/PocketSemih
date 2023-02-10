@@ -87,7 +87,7 @@ public class SemihClicker extends GameScreenObject implements InputListener {
 		for (int i = 0, max = Math.min(bananaCount, 100); i < max; ++i) {
 			screen.addObject(new SemihBanana(new Vector2(positionX, positionY)));
 		}
-		int surfFrequency = 40;
+		int surfFrequency = 100;
 		if (points.getPoints() / surfFrequency > lastPoints / surfFrequency) {
 			screen.addObject(new SurfSemihEvent(this));
 		}
