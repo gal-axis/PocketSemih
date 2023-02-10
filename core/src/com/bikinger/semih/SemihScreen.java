@@ -3,6 +3,7 @@ package com.bikinger.semih;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
+import com.bikinger.semih.clicker.HiddenSemihEvent;
 import com.bikinger.semih.clicker.SemihClicker;
 import com.bikinger.semih.clicker.SemihPoints;
 import com.one2b3.endcycle.core.Cardinal;
@@ -21,6 +22,7 @@ public class SemihScreen extends MenuScreen {
 
 	SemihPoints points;
 	SemihClicker clicker;
+	HiddenSemihEvent hiddenSemihevent;
 
 	MenuElementGroup shopButtons;
 
@@ -28,6 +30,7 @@ public class SemihScreen extends MenuScreen {
 		super(null, Color.SKY);
 		points = new SemihPoints();
 		clicker = new SemihClicker(points);
+		hiddenSemihevent = new HiddenSemihEvent(clicker);
 	}
 
 	@Override
@@ -35,6 +38,7 @@ public class SemihScreen extends MenuScreen {
 		super.init();
 		addObject(points);
 		addObject(clicker);
+		addObject(hiddenSemihevent);
 	}
 
 	@Override
@@ -57,13 +61,16 @@ public class SemihScreen extends MenuScreen {
 		shopButtons.setBackground(ActiveTheme.container);
 		shopButtons.addObject(
 				new ShopButton(points, "Chadih", "+1 Banana bei Semih Klick", "chadih.png", 1000, this::buyChadih));
+		shopButtons.addObject(
+				new ShopButton(points, "Surfih", "*2 Banana beim Surfie Event", "surfih1.png", 4000, this::buySurfih));
+		shopButtons.addObject(
+				new ShopButton(points, "Oma Semih", "+100 Banana alle 10 sec", "bananabread.png", 10000, this::buyOma));
+		shopButtons.addObject(
+				new ShopButton(points, "banana", "erhöht Bananamplier um 1", "banana.png", 4000, this::buybanana));
+		shopButtons.addObject(new ShopButton(points, "soapih", "", "soapih.png", 4000, this::buySoapih));
 		shopButtons.addObject(new ShopButton(points, "Surfih", "", "surfih1.png", 4000, this::buySurfih));
 		shopButtons.addObject(new ShopButton(points, "Surfih", "", "surfih1.png", 4000, this::buySurfih));
-		shopButtons.addObject(new ShopButton(points, "Surfih", "", "surfih1.png", 4000, this::buySurfih));
-		shopButtons.addObject(new ShopButton(points, "Surfih", "", "surfih1.png", 4000, this::buySurfih));
-		shopButtons.addObject(new ShopButton(points, "Surfih", "", "surfih1.png", 4000, this::buySurfih));
-		shopButtons.addObject(new ShopButton(points, "Surfih", "", "surfih1.png", 4000, this::buySurfih));
-		shopButtons.addObject(new ShopButton(points, "Surfih", "", "surfih1.png", 4000, this::buySurfih));
+		shopButtons.addObject(new ShopButton(points, "Monkey D. Semih", "", "coolih.png", 1000000, this::monkeyDSemih));
 		alignButtons();
 		shopButtons.calculateSize();
 		MenuLayout.layout(shopButtons).center();
@@ -98,6 +105,22 @@ public class SemihScreen extends MenuScreen {
 
 	public void buySurfih() {
 		clicker.surfBananas += 10;
+	}
+
+	public void buyOma() {
+//		clicker.clickBananas += 100;
+	}
+
+	public void buySoapih() {
+
+	}
+
+	public void buybanana() {
+		// amplier erhöhen
+	}
+
+	public void monkeyDSemih() {
+		// thank you for playing
 	}
 
 	@Override
