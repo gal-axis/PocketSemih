@@ -14,6 +14,8 @@ import com.one2b3.endcycle.screens.menus.elements.buttons.MenuButtonAction;
 
 public class ShopButton extends MenuButton implements MenuButtonAction {
 
+	static final String HIDDEN = "? ? ? ? ?";
+
 	final SemihPoints points;
 
 	String name, confirm;
@@ -38,7 +40,15 @@ public class ShopButton extends MenuButton implements MenuButtonAction {
 	}
 
 	private void updateCostText() {
-		setText(name + "\n(Cost: " + cost + ")");
+		setText((canAfford() || cost != original ? name : HIDDEN) + "\n(Cost: " + cost + ")");
+	}
+
+	@Override
+	public void update(float delta) {
+		super.update(delta);
+		if (showing) {
+			updateCostText();
+		}
 	}
 
 	@Override
@@ -48,7 +58,9 @@ public class ShopButton extends MenuButton implements MenuButtonAction {
 				points.decrease(cost);
 				points.showText(name + "\ngekauft!", getAbsoluteX() + getWidth() * 0.5F,
 						getAbsoluteY() + getHeight() * 0.5F - 15);
-				cost += original;
+				if (original < 500000) {
+					cost += original;
+				}
 				updateCostText();
 				onBuy.run();
 				return true;
@@ -73,8 +85,12 @@ public class ShopButton extends MenuButton implements MenuButtonAction {
 	@Override
 	public void drawBackground(CustomSpriteBatch batch, float x, float y, float width, float height) {
 		super.drawBackground(batch, x, y, width, height);
-		batch.setColor(canAfford() ? Color.WHITE : Color.DARK_GRAY);
 		float scale = Math.min(width / region.getRegionWidth(), height / region.getRegionHeight());
-		Painter.on(batch).at(x + width * 0.5F, y + height * 0.5F).scale(scale).align(0).paint(region);
+		Painter.on(batch).at(x + width * 0.5F, y + height * 0.5F).scale(scale).align(0)
+				.color(canAfford() ? Color.WHITE : (cost != original ? Color.GRAY : Color.BLACK)).paint(region);
+		if (cost != original) {
+			Painter.on(batch).at(x + width, y + height).font(GameFonts.MonospaceBorder).align(1)
+					.paint("x" + (cost / original - 1));
+		}
 	}
 }

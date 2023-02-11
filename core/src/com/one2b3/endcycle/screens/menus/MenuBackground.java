@@ -136,7 +136,8 @@ public class MenuBackground implements ScreenObject {
 		public void draw(CustomSpriteBatch batch, float xOfs, float yOfs, Color color) {
 			float c = (1.0F - ((size / SIZE_DST) / SIZE_MAX)) * 0.5F + 0.5F;
 			c *= Modulator.getCosine(0.9F, 1.0F, 0.34F);
-			batch.drawRectangle(xOfs + width - xPos, yOfs + yPos - size, size, size, color.r * c, color.g * c, color.b * c, color.a);
+			batch.drawRectangle(xOfs + width - xPos, yOfs + yPos - size, size, size, color.r * c, color.g * c,
+					color.b * c, color.a);
 		}
 	}
 }

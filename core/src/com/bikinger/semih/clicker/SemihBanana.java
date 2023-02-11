@@ -7,12 +7,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.one2b3.endcycle.core.painting.CustomSpriteBatch;
 import com.one2b3.endcycle.engine.graphics.data.DrawableLoader;
 import com.one2b3.endcycle.engine.screens.GameScreen;
+import com.one2b3.endcycle.engine.screens.Layers;
 import com.one2b3.endcycle.engine.screens.ScreenObject;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class SemihBanana implements ScreenObject {
+
+	static final Affine2 affine = new Affine2();
+
 	final Vector2 position;
 	float speed, angle, alpha, rotation;
 	TextureRegion texture;
@@ -40,9 +44,13 @@ public class SemihBanana implements ScreenObject {
 	}
 
 	@Override
+	public byte getLayer() {
+		return Layers.LAYER_4;
+	}
+
+	@Override
 	public void draw(CustomSpriteBatch batch, float xOfs, float yOfs) {
-		Affine2 affine = new Affine2();
-		affine.translate(position);
+		affine.setToTranslation(position);
 		affine.scale(0.15F, 0.15F);
 		affine.rotate(rotation);
 		affine.translate(texture.getRegionWidth() * -0.5F, texture.getRegionHeight() * -0.5F);

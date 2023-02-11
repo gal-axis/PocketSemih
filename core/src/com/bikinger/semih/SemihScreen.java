@@ -27,7 +27,7 @@ public class SemihScreen extends MenuScreen {
 	MenuElementGroup shopButtons;
 
 	public SemihScreen() {
-		super(null, Color.SKY);
+		super(null, new Color(Color.SKY));
 		points = new SemihPoints();
 		clicker = new SemihClicker(points);
 		hiddenSemihevent = new HiddenSemihEvent(clicker);
@@ -61,16 +61,21 @@ public class SemihScreen extends MenuScreen {
 		shopButtons.setBackground(ActiveTheme.container);
 		shopButtons.addObject(
 				new ShopButton(points, "Chadih", "+1 Banana bei Semih Klick", "chadih.png", 1000, this::buyChadih));
+		shopButtons.addObject(new ShopButton(points, "Surfih", "10 extra Banana beim Surfih Event", "surfih1.png", 4000,
+				this::buySurfih));
+		shopButtons.addObject(new ShopButton(points, "Compressih",
+				"Schaltet auto-click frei / beschleunigt auto-click!", "compressih.png", 3000, this::buyAutoClick));
+		shopButtons.addObject(new ShopButton(points, "Omih", "Backt Bananenbrot alle 5 sekunden (+100 banana)",
+				"grandmih.png", 5000, this::buyAutoMaker));
+		shopButtons.addObject(new ShopButton(points, "Bananat", "Erhöht Banana multiplier maximum um 1", "banana.png",
+				10000, this::buybanana));
 		shopButtons.addObject(
-				new ShopButton(points, "Surfih", "*2 Banana beim Surfie Event", "surfih1.png", 4000, this::buySurfih));
-		shopButtons.addObject(
-				new ShopButton(points, "Oma Semih", "+100 Banana alle 10 sec", "bananabread.png", 10000, this::buyOma));
-		shopButtons.addObject(
-				new ShopButton(points, "banana", "erhÃ¶ht Bananamplier um 1", "banana.png", 4000, this::buybanana));
-		shopButtons.addObject(new ShopButton(points, "soapih", "", "soapih.png", 4000, this::buySoapih));
-		shopButtons.addObject(new ShopButton(points, "Surfih", "", "surfih1.png", 4000, this::buySurfih));
-		shopButtons.addObject(new ShopButton(points, "Surfih", "", "surfih1.png", 4000, this::buySurfih));
-		shopButtons.addObject(new ShopButton(points, "Monkey D. Semih", "", "coolih.png", 1000000, this::monkeyDSemih));
+				new ShopButton(points, "Soapih", "Sich vom Choked werden befreien bringt zusätzlich 10000 bananen!",
+						"soapih.png", 25000, this::buyChokeBoost));
+		shopButtons.addObject(new ShopButton(points, "Condomih",
+				"Besiegen von Duendih bringt zusätzlich 10000 bananen!", "condomih.png", 25000, this::buyDuendeBoost));
+		shopButtons.addObject(new ShopButton(points, "Monkey D. Semih", "Werde zum König der Piraten!", "monkih.png",
+				1000000, this::monkeyDSemih));
 		alignButtons();
 		shopButtons.calculateSize();
 		MenuLayout.layout(shopButtons).center();
@@ -95,8 +100,15 @@ public class SemihScreen extends MenuScreen {
 	}
 
 	public void toggleShop() {
+		if (clicker.isChoked()) {
+			return;
+		}
 		shopButtons.setHidden(!shopButtons.isHidden());
 		clicker.setEnabled(shopButtons.isHidden());
+	}
+
+	public void buyAutoClick() {
+		clicker.upgradeAutoClick();
 	}
 
 	public void buyChadih() {
@@ -107,20 +119,25 @@ public class SemihScreen extends MenuScreen {
 		clicker.surfBananas += 10;
 	}
 
-	public void buyOma() {
-//		clicker.clickBananas += 100;
+	public void buyAutoMaker() {
+		clicker.upgradeAutoMaker();
 	}
 
-	public void buySoapih() {
+	public void buyDuendeBoost() {
+		clicker.stealWin += 10000;
+	}
 
+	public void buyChokeBoost() {
+		clicker.chokeWin += 10000;
 	}
 
 	public void buybanana() {
-		// amplier erhÃ¶hen
+		points.maxMultiplier++;
 	}
 
 	public void monkeyDSemih() {
-		// thank you for playing
+		points.buyFinal();
+		toggleShop();
 	}
 
 	@Override

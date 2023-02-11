@@ -26,7 +26,7 @@ public class SemihPoints extends GameScreenObject {
 		return (int) display.real;
 	}
 
-	public int multiplier = 1, maxMultiplier = 3, combo, comboRequired = 50;
+	public int multiplier = 1, maxMultiplier = 3, combo, comboRequired = 60;
 	public BoundedFloat multiplierTimer = new BoundedFloat(0.0F, 1.0F, 1.0F);
 	public BoundedFloat fever = new BoundedFloat(6.0F);
 	public float experience;
@@ -34,12 +34,30 @@ public class SemihPoints extends GameScreenObject {
 
 	MusicData normalSong = new MusicData("music/normal.ogg", 0.0F);
 	MusicData feverSong = new MusicData("music/fever.ogg", 0.0F);
+	MusicData finalSong = new MusicData("music/we_are.ogg", -1.0F);
+
+	BoundedFloat finale;
 
 	@Override
 	public void init(GameScreen screen) {
-		normalSong.id.id++;
+		normalSong.id.id = 1;
+		finalSong.id.id = 2;
+		finalSong.next = normalSong.id;
 		super.init(screen);
 		playNormal();
+	}
+
+	public void buyFinal() {
+		if (isFinal()) {
+			return;
+		}
+		finale = new BoundedFloat(0.1F);
+		fever.setMax(4 * 60);
+		startFever();
+	}
+
+	private boolean isFinal() {
+		return finale != null;
 	}
 
 	private void playNormal() {
@@ -48,7 +66,11 @@ public class SemihPoints extends GameScreenObject {
 
 	public void increase(int points) {
 		display.real += points;
-		display.speed = 1000;
+		if (display.real - display.val < 4.0F) {
+			display.speed = 1000.0F;
+		} else {
+			display.speed = (display.real - display.val) * 3.0F;
+		}
 		increaseMultiplier();
 		increaseCombo();
 	}
@@ -58,6 +80,7 @@ public class SemihPoints extends GameScreenObject {
 			return false;
 		}
 		display.real -= points;
+		display.sync();
 		return true;
 	}
 
@@ -73,11 +96,15 @@ public class SemihPoints extends GameScreenObject {
 		if (!isFever()) {
 			combo++;
 			if (combo >= comboRequired) {
-				fever.toMax();
-				combo = 0;
-				MusicHandler.instance.play(feverSong, true);
+				startFever();
 			}
 		}
+	}
+
+	private void startFever() {
+		fever.toMax();
+		combo = 0;
+		MusicHandler.instance.play(isFinal() ? finalSong : feverSong, true);
 	}
 
 	public boolean isFever() {
@@ -95,7 +122,13 @@ public class SemihPoints extends GameScreenObject {
 			multiplier = 1;
 		}
 		if (fever.decrease(delta) && fever.atMin()) {
+			fever.setMax(6.0F);
+			finale = null;
 			playNormal();
+		}
+		if (finale != null && !finale.decrease(delta)) {
+			screen.addObject(new StrawHat());
+			finale.toMax();
 		}
 	}
 
@@ -116,7 +149,7 @@ public class SemihPoints extends GameScreenObject {
 				.font(GameFonts.MonospaceBorder).paint(multiplier + "x Bananaplier");
 
 		// Bananas
-		int bananas = getPoints();
+		int bananas = (int) display.val;
 		String bananaStr;
 //		if (bananas > 1000000) {
 //			bananaStr = String.format("%.2fm", bananas / 1000000.0F);
@@ -135,12 +168,17 @@ public class SemihPoints extends GameScreenObject {
 				multiplierWidth * (isFever() ? fever.getPercentage() : (float) combo / comboRequired), multiplierHeight,
 				(isFever() ? Colors.rainbow : Color.SKY));
 		if (isFever()) {
+			String finalString = "FEVER! 3x POINTS!";
 			Painter.on(batch).at(Cardinal.getWidth() * 0.5F, feverY + multiplierHeight * 0.5F)
 					.moveY(Modulator.getLinear(0, 5, 10)).align(0).font(GameFonts.MonospaceBorder).fontScale(2.0F)
-					.color(Colors.rainbow).paint("FEVER! 3x POINTS!");
+					.color(Colors.rainbow).paint(finalString);
 		} else {
 			Painter.on(batch).at(multiplierX + multiplierWidth * 0.5F, feverY + multiplierHeight * 0.5F).align(0)
 					.font(GameFonts.MonospaceBorder).paint("Banana Fever");
+		}
+		if (isFinal()) {
+			Painter.on(batch).at(Cardinal.getWidth() * 0.5F, Cardinal.getHeight() - 65).align(0)
+					.font(GameFonts.MonospaceBorder).fontScale(2.0F).paint("Happy Birthday\nSemih!!!");
 		}
 	}
 
